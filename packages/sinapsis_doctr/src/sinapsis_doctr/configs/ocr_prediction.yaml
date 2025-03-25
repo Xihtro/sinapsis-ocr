@@ -1,0 +1,46 @@
+agent:
+  name: my_agent_test
+  description: "Agent to read image from folder, perform DocTR-OCR prediction and save the inference image in file."
+
+templates:
+- template_name: InputTemplate
+  class_name: InputTemplate
+  attributes: {}
+
+- template_name: FolderImageDatasetCV2
+  class_name: FolderImageDatasetCV2
+  template_input: InputTemplate
+  attributes:
+    data_dir: dataset/input
+
+- template_name: DocTROCRPrediction
+  class_name: DocTROCRPrediction
+  template_input: FolderImageDatasetCV2
+  attributes:
+    recognized_characters_as_labels: True
+    artefact_type_as_labels: False
+    det_arch: "fast_base"
+    reco_arch: "crnn_vgg16_bn"
+    pretrained: True
+    pretrained_backbone: True
+    assume_straight_pages: True
+    preserve_aspect_ratio: True
+    symmetric_pad: True
+    export_as_straight_boxes: False
+    detect_orientation: False
+    straighten_pages: False
+    detect_language: False
+
+- template_name: BBoxDrawer
+  class_name: BBoxDrawer
+  template_input: DocTROCRPrediction
+  attributes:
+    draw_confidence: True
+    draw_extra_labels: True
+
+- template_name: ImageSaver
+  class_name: ImageSaver
+  template_input: BBoxDrawer
+  attributes:
+    save_dir: output
+    root_dir: dataset

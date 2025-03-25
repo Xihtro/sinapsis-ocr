@@ -1,0 +1,13 @@
+services:
+
+  sinapsis-ocr-app:
+    extends:
+      service:  sinapsis-ocr-main
+      file: compose.yaml
+    container_name: sinapsis-ocr-app
+    environment:
+      AGENT_CONFIG_PATH: /app/packages/sinapsis_easyocr/src/sinapsis_easyocr/configs/easyocr_demo.yaml
+    volumes:
+      - "../webapps/:/app/webapps"
+      - "~/.cache/doctr/:/root/.cache/doctr"
+    command: python3 webapps/gradio_ocr.py

@@ -1,0 +1,25 @@
+agent:
+  name: my_agent_test
+  description: "Agent to perform OCR prediction using EasyOCR template."
+
+templates:
+- template_name: InputTemplate
+  class_name: InputTemplate
+  attributes: {}
+
+- template_name: EasyOCR
+  class_name: EasyOCR
+  template_input: InputTemplate
+  attributes:
+    reader_params:
+      lang_list: ["en"]
+    read_text_params:
+      output_format: "dict"
+    get_full_text: False
+
+- template_name: BBoxDrawer
+  class_name: BBoxDrawer
+  template_input: EasyOCR
+  attributes:
+    draw_confidence: True
+    draw_extra_labels: True
